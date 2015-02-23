@@ -18,7 +18,7 @@ public class Exec {
                 Recorder.write(Info.helpInfo());
                 break;
             case 1:
-                if (args[0].length() > 1 && args[0].equals(ArgumentName.h.getConsoleParam())) {
+                if (args[0].length() > 1 && args[0].equals("-h")) {
                     Recorder.write(Info.helpInfo());
                 } else {
                     Recorder.writeError(Info.wrongParameter(1, args[0]));
