@@ -65,6 +65,5 @@ public class ArgumentsAnalyzer {
         if(queryData.getClassName() == null || queryData.getClassName().isEmpty()) {
             throw new ArgumentException(Info.argumentNotSet("class name", "-c"));
         }
-        
     }
 }
