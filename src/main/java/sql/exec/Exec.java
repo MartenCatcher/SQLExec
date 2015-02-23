@@ -1,6 +1,5 @@
 package sql.exec;
 
-import sql.exec.config.ArgumentName;
 import sql.exec.config.ArgumentsAnalyzer;
 import sql.exec.config.Info;
 import sql.exec.db.ConnectionBuilder;
