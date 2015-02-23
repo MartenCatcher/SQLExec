@@ -65,7 +65,7 @@ public class QueryExecutor {
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DBException(e.getMessage(), e);
         }
     }
 }
