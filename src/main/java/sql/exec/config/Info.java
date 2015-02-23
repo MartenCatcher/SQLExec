@@ -5,7 +5,7 @@ package sql.exec.config;
  */
 public class Info {
     public static String helpInfo() {
-        return "Usage: Exec\n" +
+        return "Usage: java -classpath <path to driver and SQLExec> sql.exec.Exec\n" +
                 " [-h]\t\t\t\t\t\tUse for print this message.\n" +
                 " [-cs <connection string>]\tJDBC connection string.\n" +
                 " [-q <sql query>]\t\t\tSQL query.\n" +
