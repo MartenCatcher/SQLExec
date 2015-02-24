@@ -28,6 +28,7 @@ public class ArgumentsAnalyzer {
                     i++;
                     query.setQuery(args[i]);
                     break;
+                //TODO: implement
                 case "-in":
                     i++;
                     query.setQuery(args[i]);

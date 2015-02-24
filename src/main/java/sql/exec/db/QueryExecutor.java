@@ -22,7 +22,8 @@ public class QueryExecutor {
         QueryData query = connectionBuilder.getQueryData();
         try(Connection dbConnection = connectionBuilder.getConnection();
             PreparedStatement preparedStatement = dbConnection.prepareStatement(connectionBuilder.getQueryData().getQuery())) {
-            
+
+            //TODO: implement procedure call
             ResultSet rs = preparedStatement.executeQuery();
             ResultSetMetaData meta = rs.getMetaData();
             int count = meta.getColumnCount();
