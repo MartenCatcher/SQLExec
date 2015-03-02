@@ -1,5 +1,6 @@
 package sql.exec.db;
 
+import sql.exec.config.TimeHolder;
 import sql.exec.exception.DBException;
 import sql.exec.exception.RecorderException;
 import sql.exec.record.Recorder;
@@ -20,12 +21,33 @@ public class QueryExecutor {
 
     public void executeQuery() throws DBException, RecorderException {
         QueryData query = connectionBuilder.getQueryData();
-        try(Connection dbConnection = connectionBuilder.getConnection();
-            PreparedStatement preparedStatement = dbConnection.prepareStatement(connectionBuilder.getQueryData().getQuery())) {
+        
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        
+        try{
+            //TODO: verbose
+            //Recorder.write("Before connection:\t\t" + TimeHolder.getInstance().getOffset(System.nanoTime()));
+            connection = connectionBuilder.getConnection();
+            //TODO: verbose
+            //Recorder.write("Before statement:\t\t" + TimeHolder.getInstance().getOffset(System.nanoTime()));
+            statement = connection.createStatement();
 
+            //TODO: verbose
+            //Recorder.write("Before execute:\t\t" + TimeHolder.getInstance().getOffset(System.nanoTime()));
             //TODO: implement procedure call
-            ResultSet rs = preparedStatement.executeQuery();
+            statement.execute(connectionBuilder.getQueryData().getQuery());
+            //TODO: verbose
+            //Recorder.write("Before result:\t\t\t" + TimeHolder.getInstance().getOffset(System.nanoTime()));
+            rs = statement.getResultSet();
+
+            //TODO: verbose
+            //Recorder.write("Before connection:\t\t" + TimeHolder.getInstance().getOffset(System.nanoTime()));
             ResultSetMetaData meta = rs.getMetaData();
+            
+            //TODO: verbose
+            //Recorder.write("After metadata:\t\t" + TimeHolder.getInstance().getOffset(System.nanoTime()));
             int count = meta.getColumnCount();
             if(count > 0) {
                 StringBuilder record = new StringBuilder();
@@ -42,7 +64,8 @@ public class QueryExecutor {
                     Recorder.write(record.toString());
                     record.setLength(0);
                 }
-
+                //TODO: verbose
+                //Recorder.write("Before print:\t\t\t" + TimeHolder.getInstance().getOffset(System.nanoTime()));
                 int counter = 0;
                 while (rs.next()) {
                     counter++;
@@ -64,9 +87,30 @@ public class QueryExecutor {
                 if(count > 0) {
                     Recorder.write(record.toString());
                 }
+                //TODO: verbose
+                //Recorder.write("After print:\t\t\t\t" + TimeHolder.getInstance().getOffset(System.nanoTime()));
             }
         } catch (SQLException e) {
             throw new DBException(e.getMessage(), e);
+        } finally {
+            try {
+                if(rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                if(statement != null)
+                    statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                if(connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

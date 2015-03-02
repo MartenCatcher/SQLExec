@@ -2,6 +2,7 @@ package sql.exec;
 
 import sql.exec.config.ArgumentsAnalyzer;
 import sql.exec.config.Info;
+import sql.exec.config.TimeHolder;
 import sql.exec.db.ConnectionBuilder;
 import sql.exec.db.QueryData;
 import sql.exec.db.QueryExecutor;
@@ -12,6 +13,7 @@ import sql.exec.record.Recorder;
  */
 public class Exec {
     public static void main(String[] args) throws Exception {
+        TimeHolder.getInstance().setStartTime(System.nanoTime());
         switch (args.length) {
             case 0:
                 Recorder.write(Info.helpInfo());
@@ -26,11 +28,15 @@ public class Exec {
             default:
                 try {
                     QueryData query = new ArgumentsAnalyzer().analyze(args);
+                    //TODO: verbose
+                    //Recorder.write("After analyze: " + TimeHolder.getInstance().getOffset(System.nanoTime()));
                     QueryExecutor q = new QueryExecutor(new ConnectionBuilder(query));
                     q.executeQuery();
                 } catch (Exception e) {
                     Recorder.writeError(e.getMessage() + "\n");
                 }
         }
+        //TODO: verbose
+        //Recorder.write("After all:     " + TimeHolder.getInstance().getOffset(System.nanoTime()));
     }
 }
